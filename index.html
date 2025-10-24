@@ -1,0 +1,729 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>EVOYOU - EVOLVE INTO YOUR BEST SELF</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Base styles */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-image: url('bg4.png');
+            min-height: 100vh;
+        }
+
+        /* User-provided CSS for animation */
+        .scroll-animate {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out;
+        }
+        .scroll-animate.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* User-provided CSS for Floating AI button */
+        #ai-fab {
+            position: fixed;
+            right: 20px;
+            bottom: 20px;
+            width: 56px;
+            height: 56px;
+            border-radius: 9999px;
+            background: #a7b6d872;
+            color: #b91c1c;
+            border: 2px solid rgba(0,0,0,0.06);
+            box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 999;
+            transition: transform 0.12s ease;
+        }
+        #ai-fab:hover { transform: translateY(-4px); }
+
+        /* Logo styling for the Navbar */
+        .navbar-logo {
+            height: 90px;
+            width: auto;
+            filter: brightness(2) contrast(1.5) grayscale(0.5);
+        }
+
+        /* Mobile menu */
+        #mobile-menu {
+            transition: max-height 0.3s ease-in-out;
+            overflow: hidden;
+        }
+        
+        #mobile-menu.hidden {
+            max-height: 0;
+        }
+        
+        #mobile-menu:not(.hidden) {
+            max-height: 500px;
+        }
+
+        /* General Utility Styles */
+        .hidden { display: none; }
+        .fixed { position: fixed; }
+        .inset-0 { top: 0; right: 0; bottom: 0; left: 0; }
+        #ai-response-area { white-space: pre-wrap; } 
+        .task-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background-color: #9bd3eb;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            transition: background-color 0.1s;
+        }
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: #6b7280;
+        }
+        
+        #ai-open-btn:hover {
+            color: #ffffff;
+        }
+
+        #settings-dropdown {
+            position: absolute;
+            right: 0;
+            top: 100%;
+            min-width: 180px;
+            z-index: 60;
+        }
+        
+        /* Responsive font sizes */
+        @media (max-width: 640px) {
+            .hero-title {
+                font-size: 2rem !important;
+                line-height: 2.5rem !important;
+            }
+            .hero-subtitle {
+                font-size: 1.25rem !important;
+                line-height: 1.75rem !important;
+            }
+            #ai-fab {
+                right: 15px;
+                bottom: 15px;
+                width: 48px;
+                height: 48px;
+                font-size: 20px;
+            }
+        }
+        
+        @media (min-width: 641px) and (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem !important;
+                line-height: 1 !important;
+            }
+            .hero-subtitle {
+                font-size: 1.5rem !important;
+            }
+        }
+    </style>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+</head>
+
+<body class="text-black" style="background-color: rgb(225, 225, 220);">
+
+    <header id="navbar-container" class="fixed top-0 left-0 right-0 z-50 bg-gray-900 shadow-lg transition duration-300">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4"> 
+            <div class="flex justify-between items-center h-16 sm:h-20 md:h-28"> 
+                <div class="flex-shrink-0">
+                    <a href="index.html" title="EVOYOU - Home" class="flex items-center"> 
+                        <img src="logo.png" alt="EVOYOU Logo" class="w-60 h-55 px-6 mx-8 " style="filter: brightness(1.3) contrast(1.1);">
+                    </a>
+                </div>
+                
+                <!-- Desktop Navigation -->
+                <nav class="hidden md:flex space-x-4 lg:space-x-8">
+                    <a href="#home" class="text-sm lg:text-lg font-bold text-gray-200 hover:text-red-500 transition duration-150">Home</a>
+                    <a href="#dashboard-section" class="text-sm lg:text-lg font-bold text-gray-200 hover:text-red-500 transition duration-150">Dashboard</a>
+                    <a href="#leaderboard-section" class="text-sm lg:text-lg font-bold text-gray-200 hover:text-red-500 transition duration-150">Leaderboard</a>
+                    <a href="#feedback-content" class="text-sm lg:text-lg font-bold text-gray-200 hover:text-red-500 transition duration-150">Feedback</a>
+                    <a href="topschedulars.html" class="text-sm lg:text-lg font-bold text-gray-200 hover:text-red-500 transition duration-150">Top Schedulers</a>
+                </nav>
+
+                <div class="flex items-center space-x-2 sm:space-x-3 pr-2 sm:pr-4 relative"> 
+                    <button id="auth-open-btn" title="Log In" class="p-1.5 sm:p-2 text-sm sm:text-base rounded-full hover:bg-gray-700 transition duration-150 cursor-pointer text-blue-400">Log In</button>
+                    
+                    <div class="relative inline-block text-left">
+                        <button id="settings-open-btn" title="Settings" class="p-1.5 sm:p-2 rounded-full hover:bg-gray-700 transition duration-150 cursor-pointer text-gray-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37a1.724 1.724 0 002.572-1.065z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </button>
+                        <div id="settings-dropdown" class="origin-top-right absolute right-0 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 hidden">
+                            <div class="py-1" role="menu" aria-orientation="vertical" aria-labelledby="options-menu">
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-500 transition duration-100" role="menuitem">Profile</a>
+                                <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-500 transition duration-100" role="menuitem">Account</a>
+                                <a href="#" id="notifications-btn" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-red-500 transition duration-100" role="menuitem">Notifications</a>
+                                <a href="#" id="settings-logout-btn" class="block px-4 py-2 text-sm text-red-600 hover:bg-red-50 hover:text-red-700 transition duration-100" role="menuitem">Log Out </a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <button id="ai-open-btn" title="AI Assistant" class="p-1.5 sm:p-2 rounded-full hover:bg-red-500 hover:text-white transition duration-150 cursor-pointer text-red-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M19 12h1m-1.636 6.364l-.707-.707M4 12H3m1.636 6.364l.707-.707M6.012 10.362a1 1 0 00.373-.801l-.774-3.138A6.364 6.364 0 0112 4.16V3a.5.5 0 01.5-.5h1a.5.5 0 01.5.5v1.16a6.364 6.364 0 015.429 5.429l-3.138.774a1 1 0 00-.8.373 6.364 6.364 0 01-4.8 11.235 6.364 6.364 0 01-1.294-.135" />
+                        </svg>
+                    </button>
+                    
+                    <!-- Mobile Menu Button -->
+                    <button id="mobile-menu-btn" class="md:hidden p-1.5 sm:p-2 rounded-full hover:bg-gray-700 transition duration-150 cursor-pointer text-gray-200">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Mobile Navigation Menu -->
+            <div id="mobile-menu" class="hidden md:hidden pb-4">
+                <nav class="flex flex-col space-y-2 px-2">
+                    <a href="#home" class="text-base font-bold text-gray-200 hover:text-red-500 transition duration-150 py-2">Home</a>
+                    <a href="#dashboard-section" class="text-base font-bold text-gray-200 hover:text-red-500 transition duration-150 py-2">Dashboard</a>
+                    <a href="#leaderboard-section" class="text-base font-bold text-gray-200 hover:text-red-500 transition duration-150 py-2">Leaderboard</a>
+                    <a href="#feedback-content" class="text-base font-bold text-gray-200 hover:text-red-500 transition duration-150 py-2">Feedback</a>
+                    <a href="topschedulars.html" class="text-base font-bold text-gray-200 hover:text-red-500 transition duration-150 py-2">Top Schedulers</a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <main id="app-main" class="pt-20 sm:pt-24 md:pt-32">
+        <section id="home" class="pt-16 sm:pt-24 md:pt-32 pb-12 sm:pb-16 md:pb-16">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 class="hero-title text-4xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-8xl font-extrabold text-red-400 leading-tight">
+                    <span class="text-xl sm:text-2xl text-red-500"></span> 
+                    <span class="inline-block px-2 py-1">ACHIEVE YOUR</span>
+                    <span class="inline font-extrabold text-black px-1">DAILY GOALS</span>
+                </h2>
+
+                <p class="hero-subtitle mt-6 sm:mt-8 text-xl sm:text-2xl md:text-3xl lg:text-4xl font-bold text-black max-w-5xl mx-auto px-4"> 
+                    🕐 <u>SCHEDULE YOUR DAY IN THE BEST WAY POSSIBLE</u>
+                </p>
+                <div class="mt-6 sm:mt-8 flex justify-center space-x-4">
+                    <a href="schedular.html" class="px-6 sm:px-8 py-2.5 sm:py-3 text-base sm:text-lg font-bold rounded-lg bg-green-500 text-white shadow-xl hover:bg-red-600 transition duration-300 transform hover:-translate-y-0.5">
+                        Start Scheduling
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <section id="dashboard-section" class="py-12 sm:py-16 scroll-animate">
+            <div id="dashboard-content" class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h3 class="inline-block text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold text-center text-neutral-800 mb-10 sm:mb-12 md:mb-16">DASHBOARD</h3>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 sm:gap-6 md:gap-8">
+                    <div class="p-4 sm:p-6 rounded-xl shadow-lg bg-red-200 transition duration-300 hover:shadow-xl transform hover:scale-[1.02]">
+                        <h4 class="text-base sm:text-lg font-semibold text-gray-600">Daily Tasks 🎯</h4>
+                        <p id="tasks-completed-stat" class="mt-2 text-4xl sm:text-5xl font-extrabold text-red-700">0</p>
+                        <p id="tasks-total-stat" class="text-sm text-gray-800 mt-2 sm:mt-3">/0 Total Goals</p>
+                    </div>
+                    <div class="p-4 sm:p-6 rounded-xl shadow-lg bg-red-400 transition duration-300 hover:shadow-xl transform hover:scale-[1.02]">
+                        <h4 class="text-base sm:text-lg font-semibold text-gray-600">STREAK SCORE 🔥</h4>
+                        <p class="mt-2 text-4xl sm:text-5xl font-extrabold text-gray-900">220</p>
+                        <p class="text-sm text-gray-500 mt-1">STREAK</p>
+                    </div>
+                    <div class="p-4 sm:p-6 rounded-xl shadow-lg bg-yellow-300 transition duration-300 hover:shadow-xl transform hover:scale-[1.02] sm:col-span-2 md:col-span-1">
+                        <h4 class="text-base sm:text-lg font-semibold text-gray-600">Active Minutes ⏳</h4>
+                        <p class="mt-2 text-4xl sm:text-5xl font-extrabold text-gray-900">45</p>
+                        <p class="text-sm text-gray-500 mt-1">min</p>
+                    </div>
+                </div>
+
+                <div class="mt-12 sm:mt-16 bg-gray-50 p-4 sm:p-6 md:p-10 rounded-xl shadow-2xl border border-gray-200">
+                    <h4 class="text-2xl sm:text-3xl font-bold text-gray-800 mb-4 sm:mb-6 border-b pb-3">My Daily Goals</h4>
+                    <div id="task-list" class="space-y-3 sm:space-y-4 min-h-[100px]">
+                    </div>
+
+                    <form id="add-task-form" class="mt-6 sm:mt-8 flex flex-col sm:flex-row gap-3 sm:gap-4">
+                        <input type="text" id="task-input" placeholder="Enter new daily goal (e.g., Read for 30 min)" required class="flex-grow p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 text-base sm:text-lg"/>
+                        <button type="submit" class="sm:w-auto w-full px-4 sm:px-6 py-2.5 sm:py-3 bg-red-500 text-white font-semibold rounded-lg shadow-md hover:bg-red-600 transition duration-150">Add Goal</button>
+                    </form>
+                    <div id="auth-prompt" class="mt-4 text-center text-sm text-gray-600 hidden">
+                        <p>Sign in to save your goals permanently!</p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="leaderboard-section" class="py-12 sm:py-16 scroll-animate">
+            <div id="leaderboard-content" class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h3 class="text-2xl sm:text-3xl md:text-4xl mt-12 sm:mt-16 text-center font-extrabold text-gray-600 mb-8 sm:mb-12">Live Leaderboard 📈</h3>
+                <div class="max-w-xl mx-auto bg-white rounded-xl shadow-2xl overflow-hidden">
+                    <div class="flex justify-between items-center p-3 sm:p-4 border-b bg-yellow-50">
+                        <div class="flex items-center space-x-2 sm:space-x-4">
+                            <span class="text-lg sm:text-xl font-bold text-yellow-600">1.</span>
+                            <span class="text-2xl sm:text-3xl">🥇</span>
+                            <span class="text-base sm:text-lg font-medium text-blue-600">Alex Johnson</span>
+                        </div>
+                        <span class="text-lg sm:text-xl font-extrabold text-black whitespace-nowrap ml-2">1250 streaks</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 sm:p-4 border-b hover:bg-gray-100">
+                        <div class="flex items-center space-x-2 sm:space-x-4">
+                            <span class="text-lg sm:text-xl font-bold text-gray-500">2.</span>
+                            <span class="text-2xl sm:text-3xl">🥈</span>
+                            <span class="text-base sm:text-lg font-medium text-gray-700">Mia Chen</span>
+                        </div>
+                        <span class="text-lg sm:text-xl font-extrabold text-black whitespace-nowrap ml-2">1180 streaks</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 sm:p-4 border-b hover:bg-gray-100">
+                        <div class="flex items-center space-x-2 sm:space-x-4">
+                            <span class="text-lg sm:text-xl font-bold text-amber-700">3.</span>
+                            <span class="text-2xl sm:text-3xl">🥉</span>
+                            <span class="text-base sm:text-lg font-medium text-gray-700">David Lee</span>
+                        </div>
+                        <span class="text-lg sm:text-xl font-extrabold text-black whitespace-nowrap ml-2">1090 streaks</span>
+                    </div>
+                    <div class="flex justify-between items-center p-3 sm:p-4 hover:bg-gray-100">
+                        <div class="flex items-center space-x-2 sm:space-x-4">
+                            <span class="text-lg sm:text-xl font-bold text-gray-500">4.</span>
+                            <span class="text-2xl sm:text-3xl">🎖️</span>
+                            <span class="text-base sm:text-lg font-medium text-gray-700">Priya Sharma</span>
+                        </div>
+                        <span class="text-lg sm:text-xl font-extrabold whitespace-nowrap ml-2">950 streaks</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-12 sm:py-16 scroll-animate">
+            <div id="feedback-content" class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h3 class="thicker-underline mt-12 sm:mt-16 text-2xl sm:text-3xl md:text-4xl font-extrabold text-center text-gray-600 mb-10 sm:mb-14"><u>We Value Your Input</u></h3>
+                <div class="max-w-2xl mx-auto p-4 sm:p-6 md:p-8 rounded-xl shadow-2xl bg-blue-600/10">
+                    <form id="feedback-form" class="space-y-3 sm:space-y-4">
+                        <input
+                            type="text"
+                            id="feedback-name"
+                            placeholder="Your Name (Optional)"
+                            class="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-base"
+                        />
+                        <textarea
+                            id="feedback-text"
+                            placeholder="Your Feedback"
+                            rows="4"
+                            required
+                            class="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-base"
+                        ></textarea>
+                        <button
+                            type="submit"
+                            class="w-full py-2.5 sm:py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-150"
+                        >
+                            Submit Feedback
+                        </button>
+                    </form>
+                    <div id="feedback-status" class="mt-4 text-center hidden"></div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer class="bg-gray-800 text-white py-6 sm:py-8 mt-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-base sm:text-lg font-semibold mb-2"><u>EVOYOU</u></p>
+            <p class="text-xs sm:text-sm text-gray-400">© 2025 All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <div id="auth-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-70 z-[100] flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-6 sm:p-8 w-full max-w-md shadow-2xl">
+            <div class="flex justify-between items-center mb-4 sm:mb-6">
+                <h4 id="auth-modal-title" class="text-xl sm:text-2xl font-bold text-gray-800">Log In</h4>
+                <button id="auth-close-btn" class="text-gray-400 hover:text-gray-600 text-2xl font-semibold" aria-label="Close">&times;</button>
+            </div>
+            <div id="auth-message-box" class="hidden p-3 mb-4 rounded-lg text-sm"></div>
+            <form id="auth-form" class="space-y-3 sm:space-y-4">
+                <input type="email" id="auth-email" placeholder="Email" required class="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-base"/>
+                <input type="password" id="auth-password" placeholder="Password" required class="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500 text-base"/>
+                <button type="submit" id="auth-submit-btn" class="w-full py-2.5 sm:py-3 bg-blue-600 text-white font-semibold rounded-lg shadow-md hover:bg-blue-700 transition duration-150 disabled:bg-blue-400">
+                    Log In
+                </button>
+            </form>
+            <p class="mt-4 sm:mt-6 text-center text-sm text-gray-600">
+                <span id="auth-toggle-text">Need an account?</span>
+                <button id="auth-toggle-btn" class="text-blue-600 font-medium hover:text-blue-700 ml-1">Sign Up</button>
+            </p>
+        </div>
+    </div>
+
+    <button id="ai-fab" title="Ask Evo-AI" aria-label="Ask Evo-AI">💬</button>
+
+    <div id="ai-modal" class="hidden fixed inset-0 bg-gray-900 bg-opacity-70 z-[200] flex items-center justify-center p-4">
+        <div class="bg-white rounded-xl p-4 sm:p-6 w-full max-w-lg shadow-2xl relative">
+            <div class="flex justify-between items-center mb-3 sm:mb-4">
+                <h3 class="text-lg sm:text-xl font-bold">Evo-AI — Scheduling Assistant</h3>
+                <button id="ai-close" class="text-gray-400 hover:text-gray-600 text-2xl font-semibold" aria-label="Close">&times;</button>
+            </div>
+
+            <div id="ai-response-area" class="h-40 overflow-y-auto p-2.5 sm:p-3 mb-3 sm:mb-4 border rounded-lg bg-gray-50 text-gray-700 text-sm">
+                Hello! I'm Evo-AI. Tell me what you need to schedule, or ask for a productivity tip! (e.g., "Give me a schedule for a busy student").
+            </div>
+
+            <form id="ai-form" class="space-y-2 sm:space-y-3">
+                <textarea id="ai-input" placeholder="Ask Evo-AI for scheduling help..." rows="2" class="w-full p-2.5 sm:p-3 border border-gray-300 rounded-lg focus:ring-red-500 focus:border-red-500 resize-none text-base"></textarea>
+                <button type="submit" id="ai-submit-btn" class="w-full py-2.5 sm:py-3 bg-red-600 text-white font-semibold rounded-lg shadow-md hover:bg-red-700 transition duration-150">Generate Schedule</button>
+            </form>
+
+            <div id="ai-status" class="mt-2 sm:mt-3 text-center text-sm hidden"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        // helper short selectors
+        const $ = (sel) => document.querySelector(sel);
+        const $$ = (sel) => Array.from(document.querySelectorAll(sel));
+
+        // Safe escape HTML function (compatible)
+        function escapeHtml(unsafe) {
+            if (typeof unsafe !== 'string') return '';
+            return unsafe
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#039;');
+        }
+
+        // showMessage: handles 'error', 'success', 'info'
+        function showMessage(element, message, type) {
+            if (!element) return;
+            element.textContent = message;
+            let base = 'mt-4 text-center p-3 rounded-lg text-sm';
+            if (type === 'error') {
+                element.className = base + ' bg-red-100 text-red-700';
+            } else if (type === 'success') {
+                element.className = base + ' bg-green-100 text-green-700';
+            } else { // info or default
+                element.className = base + ' bg-blue-50 text-gray-700';
+            }
+            element.classList.remove('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            /***** Animated on-scroll elements *****/
+            const animateElements = document.querySelectorAll('.scroll-animate');
+            if ('IntersectionObserver' in window) {
+                const observer = new IntersectionObserver(entries => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) entry.target.classList.add('visible');
+                    });
+                }, { threshold: 0.1 });
+                animateElements.forEach(el => observer.observe(el));
+            } else {
+                // fallback: just make them visible
+                animateElements.forEach(el => el.classList.add('visible'));
+            }
+
+            /***** Mobile menu toggle *****/
+            const mobileMenuBtn = $('#mobile-menu-btn');
+            const mobileMenu = $('#mobile-menu');
+            if (mobileMenuBtn && mobileMenu) {
+                mobileMenuBtn.addEventListener('click', () => {
+                    mobileMenu.classList.toggle('hidden');
+                });
+
+                // Close mobile menu when clicking a link (if links exist)
+                mobileMenu.querySelectorAll('a').forEach(link => {
+                    link.addEventListener('click', () => {
+                        mobileMenu.classList.add('hidden');
+                    });
+                });
+            }
+
+            /***** Auth modal *****/
+            const authModal = $('#auth-modal');
+            const authCloseBtn = $('#auth-close-btn');
+            const authForm = $('#auth-form');
+            const authToggleBtn = $('#auth-toggle-btn');
+            const authModalTitle = $('#auth-modal-title');
+            const authMessageBox = $('#auth-message-box');
+            let isSigningUp = false;
+
+            function toggleAuthModal(show) {
+                if (!authModal) return;
+                authModal.classList.toggle('hidden', !show);
+            }
+
+            const headerOpen = $('#auth-open-btn');
+            if (headerOpen) headerOpen.addEventListener('click', () => toggleAuthModal(true));
+            if (authCloseBtn) authCloseBtn.addEventListener('click', () => toggleAuthModal(false));
+
+            if (authToggleBtn) {
+                authToggleBtn.addEventListener('click', () => {
+                    isSigningUp = !isSigningUp;
+                    authModalTitle.textContent = isSigningUp ? 'Sign Up' : 'Log In';
+                    const submitBtn = $('#auth-submit-btn');
+                    if (submitBtn) submitBtn.textContent = isSigningUp ? 'Sign Up' : 'Log In';
+                    const toggleText = $('#auth-toggle-text');
+                    if (toggleText) toggleText.textContent = isSigningUp ? 'Already have an account?' : 'Need an account?';
+                    authToggleBtn.textContent = isSigningUp ? 'Log In' : 'Sign Up';
+                    if (authMessageBox) authMessageBox.classList.add('hidden');
+                });
+            }
+
+            if (authForm) {
+                authForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    if (!authMessageBox) return;
+                    authMessageBox.classList.add('hidden');
+                    const email = $('#auth-email') ? $('#auth-email').value : '';
+                    
+                    if (!email || email.indexOf('@') === -1) {
+                        authMessageBox.textContent = 'Please enter a valid email.';
+                        authMessageBox.className = 'p-3 mb-4 rounded-lg text-sm bg-red-100 text-red-700';
+                        authMessageBox.classList.remove('hidden');
+                        return;
+                    }
+                    
+                    authMessageBox.textContent = isSigningUp ? 'Sign Up successful! (demo)' : 'Log In successful! (demo)';
+                    authMessageBox.className = 'p-3 mb-4 rounded-lg text-sm bg-green-100 text-green-700';
+                    authMessageBox.classList.remove('hidden');
+
+                    setTimeout(() => toggleAuthModal(false), 900);
+                });
+            }
+
+            /***** Notifications *****/
+            const notificationsBtn = $('#notifications-btn');
+            if (notificationsBtn) {
+                notificationsBtn.addEventListener('click', async (e) => {
+                    e.preventDefault();
+
+                    if (!('Notification' in window)) {
+                        alert('This browser does not support notifications');
+                        return;
+                    }
+
+                    try {
+                        const permission = await Notification.requestPermission();
+                        if (permission === 'granted') {
+                            new Notification('EVOYOU Notifications Enabled! 🎉', {
+                                body: 'You will now receive notifications for your daily goals and reminders.',
+                                icon: 'logo.png',
+                                badge: 'logo.png'
+                            });
+                        } else if (permission === 'denied') {
+                            alert('Notification permission denied. Please enable notifications in your browser settings.');
+                        }
+                    } catch (error) {
+                        console.error('Error requesting notification permission:', error);
+                    }
+
+                    const settingsDropdown = $('#settings-dropdown');
+                    if (settingsDropdown) {
+                        settingsDropdown.classList.add('hidden');
+                    }
+                });
+            }
+
+            /***** Tasks (mock) *****/
+            let mockTasks = [
+                { id: 1, text: 'Complete EVOYOU setup guide', completed: false },
+                { id: 2, text: 'Run 1 mile or 15 mins exercise', completed: true },
+                { id: 3, text: 'Deep work on project for 90 mins', completed: false }
+            ];
+            let nextTaskId = mockTasks.length + 1;
+
+            const taskList = $('#task-list');
+            const addTaskForm = $('#add-task-form');
+            const taskInput = $('#task-input');
+            const tasksCompletedStat = $('#tasks-completed-stat');
+            const tasksTotalStat = $('#tasks-total-stat');
+
+            function renderTasks() {
+                if (!taskList) return;
+                taskList.innerHTML = '';
+
+                if (mockTasks.length === 0) {
+                    taskList.innerHTML = '<p class="text-center text-gray-500 p-4">No goals added yet. Start evolving!</p>';
+                }
+
+                let completedCount = 0;
+                mockTasks.forEach(task => {
+                    if (task.completed) completedCount++;
+
+                    const taskDiv = document.createElement('div');
+                    taskDiv.className = `task-item ${task.completed ? 'completed' : ''}`;
+                    taskDiv.dataset.id = task.id;
+
+                    taskDiv.innerHTML = `
+                        <div class="flex items-center space-x-3 flex-grow min-w-0">
+                            <input type="checkbox" ${task.completed ? 'checked' : ''} class="task-checkbox h-5 w-5 text-red-600 border-gray-300 rounded focus:ring-red-500 cursor-pointer flex-shrink-0">
+                            <span class="task-text text-base sm:text-lg font-medium text-gray-800 break-words">${escapeHtml(task.text)}</span>
+                        </div>
+                        <button class="delete-task-btn text-gray-400 hover:text-red-600 transition duration-150 p-1 rounded-full flex-shrink-0 ml-2" title="Delete Goal">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                                <path fill-rule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm4 0a1 1 0 10-2 0v6a1 1 0 102 0V8z" clip-rule="evenodd" />
+                            </svg>
+                        </button>
+                    `;
+                    taskList.appendChild(taskDiv);
+                });
+
+                if (tasksCompletedStat) tasksCompletedStat.textContent = completedCount;
+                if (tasksTotalStat) tasksTotalStat.textContent = `/${mockTasks.length} Total Goals`;
+
+                // attach handlers
+                taskList.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                    checkbox.onchange = handleTaskToggle;
+                });
+                taskList.querySelectorAll('.delete-task-btn').forEach(button => {
+                    button.onclick = handleDeleteTask;
+                });
+            }
+
+            function handleTaskToggle(e) {
+                const item = e.target.closest('.task-item');
+                if (!item) return;
+                const taskId = parseInt(item.dataset.id, 10);
+                const task = mockTasks.find(t => t.id === taskId);
+                if (task) {
+                    task.completed = e.target.checked;
+                    renderTasks();
+                }
+            }
+
+            function handleDeleteTask(e) {
+                const item = e.target.closest('.task-item');
+                if (!item) return;
+                const taskId = parseInt(item.dataset.id, 10);
+                if (confirm('Are you sure you want to delete this goal?')) {
+                    mockTasks = mockTasks.filter(t => t.id !== taskId);
+                    renderTasks();
+                }
+            }
+
+            if (addTaskForm && taskInput) {
+                addTaskForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const text = taskInput.value.trim();
+                    if (text) {
+                        mockTasks.push({ id: nextTaskId++, text: text, completed: false });
+                        taskInput.value = '';
+                        renderTasks();
+                    }
+                });
+            }
+
+            /***** Feedback form *****/
+            const feedbackForm = $('#feedback-form');
+            const feedbackStatus = $('#feedback-status');
+
+            if (feedbackForm) {
+                feedbackForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const name = $('#feedback-name') ? $('#feedback-name').value.trim() : '';
+                    const text = $('#feedback-text') ? $('#feedback-text').value.trim() : '';
+
+                    if (text.length < 5) {
+                        showMessage(feedbackStatus, 'Feedback is too short.', 'error');
+                        return;
+                    }
+
+                    const submitBtn = feedbackForm.querySelector('button[type="submit"]');
+                    if (submitBtn) submitBtn.disabled = true;
+                    showMessage(feedbackStatus, 'Sending feedback...', 'info');
+
+                    setTimeout(() => {
+                        showMessage(feedbackStatus, `Thank you, ${name || 'User'}! Your feedback has been received.`, 'success');
+                        feedbackForm.reset();
+                        if (submitBtn) submitBtn.disabled = false;
+                    }, 1500);
+                });
+            }
+
+            /***** AI modal and replies *****/
+            const aiFab = $('#ai-fab');
+            const aiOpenBtn = $('#ai-open-btn'); // top-right icon
+            const aiModal = $('#ai-modal');
+            const aiClose = $('#ai-close');
+            const aiForm = $('#ai-form');
+            const aiInput = $('#ai-input');
+            const aiResponseArea = $('#ai-response-area');
+            const aiStatus = $('#ai-status');
+
+            const aiReplies = [
+                "A busy student schedule: Wake 7am, Class/Study Blocks (9-12, 1-4), 30 min exercise, 1 hr review, Sleep 11pm.",
+                "Productivity Tip: Use the 'Eat the Frog' method by tackling your hardest task first thing in the morning.",
+                "To schedule exercise, break it into smaller 15-minute bursts: one in the morning, one in the afternoon.",
+                "Try 'Time Blocking': Allocate specific blocks of time (e.g., 2 hours) for specific tasks, and stick to them strictly.",
+                "For deep work, schedule it for when you have the fewest distractions, usually early morning or late evening."
+            ];
+
+            function toggleAIModal(show) {
+                if (!aiModal) return;
+                aiModal.classList.toggle('hidden', !show);
+                if (show && aiInput) aiInput.focus();
+            }
+
+            if (aiFab) aiFab.addEventListener('click', () => toggleAIModal(true));
+            if (aiOpenBtn) aiOpenBtn.addEventListener('click', () => toggleAIModal(true));
+            if (aiClose) aiClose.addEventListener('click', () => toggleAIModal(false));
+
+            if (aiForm && aiInput && aiResponseArea) {
+                aiForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    const q = aiInput.value.trim();
+                    if (!q) return;
+
+                    const userText = `<div class="mt-4 p-2 bg-blue-50 rounded-lg"><strong>You:</strong> ${escapeHtml(q)}</div>`;
+                    const thinkingText = `<div class="mt-2 ai-thinking p-2 text-gray-500 italic"><em>AI:</em> Generating personalized schedule...</div>`;
+                    aiResponseArea.innerHTML += userText + thinkingText;
+
+                    aiInput.value = "";
+                    aiResponseArea.scrollTop = aiResponseArea.scrollHeight;
+
+                    setTimeout(() => {
+                        const reply = aiReplies[Math.floor(Math.random() * aiReplies.length)];
+                        const thinkingElement = aiResponseArea.querySelector('.ai-thinking:last-child');
+                        if (thinkingElement) {
+                            thinkingElement.innerHTML = `<div class="p-2 bg-red-50 rounded-lg"><strong>AI:</strong> ${escapeHtml(reply)}</div>`;
+                            thinkingElement.classList.remove('ai-thinking', 'italic');
+                            thinkingElement.classList.remove('text-gray-500');
+                        }
+                        aiResponseArea.scrollTop = aiResponseArea.scrollHeight;
+                    }, 1500);
+                });
+            }
+
+            /***** Settings dropdown toggle (top-right) *****/
+            const settingsOpenBtn = $('#settings-open-btn');
+            const settingsDropdown = $('#settings-dropdown');
+
+            function toggleSettingsDropdown() {
+                if (settingsDropdown) {
+                    settingsDropdown.classList.toggle('hidden');
+                }
+            }
+
+            if (settingsOpenBtn) settingsOpenBtn.addEventListener('click', toggleSettingsDropdown);
+
+            document.addEventListener('click', (event) => {
+                if (!settingsDropdown || !settingsOpenBtn) return;
+                if (!settingsDropdown.contains(event.target) &&
+                    !settingsOpenBtn.contains(event.target) &&
+                    !settingsDropdown.classList.contains('hidden')) {
+                    settingsDropdown.classList.add('hidden');
+                }
+            });
+
+            // Initial render
+            renderTasks();
+        }); // DOMContentLoaded end
+
+    </script>
+</body>
+</html>
