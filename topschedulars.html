@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVOYOU-STUDENT TESTIMONIALS</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom styles for animations/images */
+        .student-img {
+            width: 100px; /* Reduced size slightly for better mobile fit */
+            height: 100px;
+            object-fit: cover;
+            border-radius: 50%; /* Make images circular */
+            border: 4px solid #0c0505;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .scroll-animate, .student-card, .feedback-card {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.6s ease-out, transform 0.6s ease-out;
+        }
+        .scroll-animate.visible, .student-card.visible, .feedback-card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        /* Style for the student cards to fix some spacing issues in your original fragment */
+        .student-card .p-8 {
+            padding-bottom: 2rem;
+        }
+        .feedback-card {
+            transition-delay: 0.1s;
+        }
+
+        /* Custom styles for Mobile Menu */
+        .mobile-menu {
+            transition: transform 0.3s ease-in-out;
+            transform: translateX(100%); /* Start off-screen */
+        }
+        .mobile-menu.open {
+            transform: translateX(0); /* Slide in */
+        }
+        /* Backdrop overlay */
+        .mobile-menu-backdrop {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 40; /* Lower than menu, higher than content */
+        }
+        .mobile-menu.open + .mobile-menu-backdrop {
+            display: block;
+        }
+
+        /* Fix the body class spacing issue from the provided code fragment */
+        .font-sans {
+            font-family: sans-serif;
+        }
+    </style>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
+</head>
+<body class="font-sans">
+    
+    <header id="navbar-container" class="fixed top-0 left-0 right-0 z-50 bg-gray-900 shadow-lg transition duration-300 py-3 ">
+        <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px my-3">
+            <div class="flex justify-between items-center navbar-mobile-height  w-auto">
+                
+                <a href="index.html" title="EVOYOU-Home" class="flex items-center">
+                    <img src="logo.png" alt="EVOYOU Logo" class="w-60 h-55 px-6 mx-8" style="filter: brightness(1.3) contrast(1.1);">
+                </a>
+                
+                <nav class="hidden md:block">
+                    <a href="index.html" class="text-lg font-bold text-gray-200 hover:text-red-400 transition duration-150 mx-6">Home</a>
+                    <a href="#testimonials" class="text-lg text-gray-200 font-bold hover:text-red-500 mx-6">Testimonials</a>
+                    <a href="#getting-started" class="text-lg text-gray-200 font-bold hover:text-red-500 mx-6">How It Works</a>
+                </nav>
+
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-button" class="text-gray-200 hover:text-red-500 focus:outline-none p-2">
+                        <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div id="mobile-menu" class="mobile-menu fixed top-0 right-0 h-full w-64 bg-gray-900 z-50 shadow-2xl p-6 md:hidden">
+        <div class="flex justify-end mb-8">
+            <button id="mobile-menu-close" class="text-gray-200 hover:text-red-500 focus:outline-none">
+                <svg class="h-8 w-8" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+        <nav class="flex flex-col space-y-4">
+            <a href="index.html" class="mobile-link text-xl font-bold text-gray-200 hover:text-red-400 transition duration-150">Home</a>
+            <a href="#testimonials" class="mobile-link text-xl text-gray-200 font-bold hover:text-red-500">Testimonials</a>
+            <a href="#getting-started" class="mobile-link text-xl text-gray-200 font-bold hover:text-red-500">How It Works</a>
+        </nav>
+        <div class="mt-8 pt-4 border-t border-gray-700">
+            <a href="index.html" class="w-full inline-block px-4 py-2 text-center text-lg font-bold rounded-lg bg-red-500 text-white shadow-md hover:bg-red-600 transition duration-300">
+                Try EVOYOU Today
+            </a>
+        </div>
+    </div>
+    <div id="mobile-menu-backdrop" class="mobile-menu-backdrop"></div>
+    <main class="min-h-screen">
+        <section id="testimonials" class="py-24" style=" background-image: url('bg5.png'); ">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-5xl font-extrabold text-center text-black py-20 mb-16 scroll-animate">
+                    Hear From Our Top Schedulers
+                </h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-10 max-w-7xl mx-auto">
+                    
+                    <div class="student-card" data-id="9">
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                            <div class="p-8 bg-gradient-to-br from-red-50 to-red-100">
+                                <div class="flex flex-col md:flex-row gap-6 items-start">
+                                    <div class="flex-shrink-0">
+                                        <img src="student1.jpg" alt="Karthik Iyer" class="student-img" />
+                                    </div>
+                                    <div class="flex-grow">
+                                        <h3 class="text-2xl font-bold text-gray-800">Nidhi Dubey</h3>
+                                        <p class="text-gray-600 mt-1">Electronics Engineering, 2nd Year</p>
+                                        <div class="flex items-center gap-4 mt-2 flex-wrap">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-500 text-white">
+                                                ⭐ 301 days Streak
+                                            </span>
+                                            <span class="text-sm font-medium text-gray-700">Perfect 10.0 CGPA in last semester</span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <p class="text-gray-700 leading-relaxed">I was skeptical about an AI managing my time, but EVOYOU proved me wrong! It understood my study preferences and created a schedule that felt natural. My continuous efforts following this schedule, combined with consistent revision blocks, helped me achieve a perfect score!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-6 border-t-2 border-gray-200">
+                                <h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                    🎯 Advice for New Students:
+                                </h4>
+                                <p class="text-gray-700 leading-relaxed italic">"Review your schedule every Sunday with the AI and adjust for the upcoming week. Tell it about any changes - exam dates, project submissions, events. The AI adapts beautifully. Also, be punctual with starting times, even if you go a few minutes over."</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="student-card" data-id="10">
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                            <div class="p-8 bg-gradient-to-br from-red-50 to-red-100">
+                                <div class="flex flex-col md:flex-row gap-6 items-start">
+                                    <div class="flex-shrink-0">
+                                        <img src="student2.jpg" alt="Divya Nair" class="student-img" />
+                                    </div>
+                                    <div class="flex-grow">
+                                        <h3 class="text-2xl font-bold text-gray-800">Yug Solanki</h3>
+                                        <p class="text-gray-600 mt-1">Psychology, 3rd Year</p>
+                                        <div class="flex items-center gap-4 mt-2 flex-wrap">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-500 text-white">
+                                                ⭐ 234 days Streak
+                                            </span>
+                                            <span class="text-sm font-medium text-gray-700">Completed internship hours with 9.3 CGPA</span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <p class="text-gray-700 leading-relaxed">Psychology requires both theoretical knowledge and practical hours. EVOYOU helped me balance my internship schedule with coursework. The AI's perfect time allocation meant I never felt overwhelmed, and my grades improved because of consistent, focused study sessions!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-6 border-t-2 border-gray-200">
+                                <h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                    🎯 Advice for New Students:
+                                </h4>
+                                <p class="text-gray-700 leading-relaxed italic">"When starting out, give the AI two weeks of your actual routine before letting it create your optimal schedule. It learns your patterns. And don't aim for perfection immediately - even 80% schedule adherence will show results. Build up to being fully punctual and dedicate yourself to the schedule and try being consistent as much as possible."</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="student-card" data-id="11">
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                            <div class="p-8 bg-gradient-to-br from-blue-50 to-blue-100">
+                                <div class="flex flex-col md:flex-row gap-6 items-start">
+                                    <div class="flex-shrink-0">
+                                        <img src="https://images.pexels.com/photos/159632/school-children-happy-food-159632.jpeg?w=400&h=400&fit=crop" alt="Rahul Mehta" class="student-img" />
+                                    </div>
+                                    <div class="flex-grow">
+                                        <h3 class="text-2xl font-bold text-gray-800">Anuli Giri</h3>
+                                        <p class="text-gray-600 mt-1">Mechanical Engineering, 3rd Year</p>
+                                        <div class="flex items-center gap-4 mt-2 flex-wrap">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-500 text-white">
+                                                ⭐ 276 days Streak
+                                            </span>
+                                            <span class="text-sm font-medium text-gray-700">Won hackathon while maintaining 8.6 CGPA</span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <p class="text-gray-700 leading-relaxed">Between classes, lab sessions, and my passion for hackathons, my schedule was chaos. EVOYOU's AI scheduler carved out time for everything I loved while ensuring my academics didn't suffer. Following it consistently helped me achieve both my competitive and academic goals!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-6 border-t-2 border-gray-200">
+                                <h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                    🎯 Advice for New Students:
+                                </h4>
+                                <p class="text-gray-700 leading-relaxed italic">"Include your hobbies and passion projects in the schedule! The AI will make time for them, which actually motivates you to be punctual with study blocks. Also, use the streak tracker - watching it grow will push you to maintain consistency. You might not feel it in the beginning but with time you will feel the change."</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="student-card" data-id="12">
+                        <div class="bg-white rounded-2xl shadow-xl overflow-hidden hover:shadow-2xl transition-shadow duration-300">
+                            <div class="p-8 bg-gradient-to-br from-yellow-50 to-yellow-100">
+                                <div class="flex flex-col md:flex-row gap-6 items-start">
+                                    <div class="flex-shrink-0">
+                                        <img src="student3.JPG" alt="Ishita Desai" class="student-img" />
+                                    </div>
+                                    <div class="flex-grow">
+                                        <h3 class="text-2xl font-bold text-gray-800">Raghav Juyal</h3>
+                                        <p class="text-gray-600 mt-1">Data Science, 2nd Year</p>
+                                        <div class="flex items-center gap-4 mt-2 flex-wrap">
+                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-semibold bg-red-500 text-white">
+                                                ⭐ 212 days Streak
+                                            </span>
+                                            <span class="text-sm font-medium text-gray-700">Completed 3 certifications with 9.0 CGPA</span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <p class="text-gray-700 leading-relaxed">I wanted to upskill with online certifications but couldn't find time. EVOYOU's AI analyzed my available hours and scheduled everything perfectly. My continuous efforts following this schedule helped me complete multiple certifications without my grades dropping!</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-gray-50 p-6 border-t-2 border-gray-200">
+                                <h4 class="text-lg font-bold text-gray-800 mb-2 flex items-center gap-2">
+                                    🎯 Advice for New Students:
+                                </h4>
+                                <p class="text-gray-700 leading-relaxed italic">"Be honest about your goals with the AI. Want to learn something new? Tell it. It will find or create time. Also, start your day by reviewing your schedule - it sets the intention. And celebrate small wins - completing daily goals builds momentum for punctuality."</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="getting-started" class="py-24">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="max-w-4xl mx-auto bg-white rounded-2xl shadow-2xl p-8 md:p-12">
+                    <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-8">
+                        Ready to Start Your Journey?
+                    </h2>
+                    <div class="space-y-6">
+                        <div class="flex gap-4 items-start">
+                            <div class="flex-shrink-0 w-10 h-10 bg-red-500 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                                1
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Provide Your Time Frame</h3>
+                                <p class="text-gray-600 mt-2">Tell the AI about your daily routine - classes, work, commute, meals, sleep schedule. The more details you provide, the better!</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="flex-shrink-0 w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                                2
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Let AI Create Your Perfect Schedule</h3>
+                                <p class="text-gray-600 mt-2">Our AI analyzes your time availability and creates an optimized schedule that balances studies, activities, and rest - no need to think for hours!</p>
+                            </div>
+                        </div>
+                        <div class="flex gap-4 items-start">
+                            <div class="flex-shrink-0 w-10 h-10 bg-yellow-500 text-white rounded-full flex items-center justify-center font-bold text-lg">
+                                3
+                            </div>
+                            <div>
+                                <h3 class="text-xl font-bold text-gray-800">Follow & Stay Punctual</h3>
+                                <p class="text-gray-600 mt-2">Stick to your AI-generated schedule consistently. Build your streak, track your progress, and watch your grades improve through continuous efforts!</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-10 text-center">
+                        <a href="index.html" class="inline-block px-10 py-4 text-xl font-bold rounded-lg bg-red-500 text-white shadow-xl hover:bg-red-600 transition duration-300 transform hover:-translate-y-1">
+                            Start Your Scheduling Journey
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 scroll-animate">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <h2 class="text-4xl font-extrabold text-center text-gray-800 mb-12">
+                    Key Takeaways from Top Schedulers
+                </h2>
+                <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-6xl mx-auto">
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-red-500">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Be Honest with the AI</h3>
+                        <p class="text-gray-600">Provide accurate information about your commitments and preferences for the best results.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-blue-500">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Consistency is Key</h3>
+                        <p class="text-gray-600">Follow your schedule religiously for at least 2 weeks to build the habit and see results.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-yellow-500">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Include Everything</h3>
+                        <p class="text-gray-600">Schedule your hobbies, breaks, and personal time - not just studies. Balance matters!</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-green-500">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Track Your Streak</h3>
+                        <p class="text-gray-600">Use the streak feature to stay motivated and maintain punctuality with your schedule.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-purple-500">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Start Small</h3>
+                        <p class="text-gray-600">Don't overwhelm yourself. Begin with core activities and gradually expand your schedule.</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-xl shadow-lg border-l-4 border-pink-500">
+                        <h3 class="text-lg font-bold text-gray-800 mb-2">Review Weekly</h3>
+                        <p class="text-gray-600">Update the AI about changes in your routine every week for continuous optimization.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="py-16 bg-gradient-to-br from-blue-50 to-purple-50 scroll-animate">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="text-center mb-12">
+                    <h2 class="text-4xl font-extrabold text-gray-800 mb-4">
+                        What Our Users Are Saying
+                    </h2>
+                    <p class="text-lg text-gray-600 max-w-2xl mx-auto">
+                        Real feedback from students who are using EVOYOU to transform their daily routines
+                    </p>
+                </div>
+
+                <div class="max-w-6xl mx-auto grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                    
+                    <div class="feedback-card bg-white rounded-xl shadow-lg p-6 border-t-4 border-green-500 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-start gap-3 mb-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl">😊</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Priya M.</h4>
+                                <p class="text-sm text-gray-500">Used for 3 months</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            "Started using EVOYOU last semester and honestly it changed everything! I used to procrastinate a lot but having the AI create a schedule made me more accountable. My study time became way more productive and I actually started enjoying my free time guilt-free. My CGPA went from 7.8 to 8.9!"
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <span class="text-yellow-500">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card bg-white rounded-xl shadow-lg p-6 border-t-4 border-blue-500 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-start gap-3 mb-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl">🎯</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Arjun K.</h4>
+                                <p class="text-sm text-gray-500">Used for 6 months</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            "The website is super easy to navigate. I just inputted my class timings and the AI did the rest. It even reminded me to take breaks which I never did before. My sleep schedule improved and I feel less stressed overall. The streak feature keeps me motivated every single day!"
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <span class="text-yellow-500">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card bg-white rounded-xl shadow-lg p-6 border-t-4 border-purple-500 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-start gap-3 mb-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl">💪</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Sneha R.</h4>
+                                <p class="text-sm text-gray-500">Used for 4 months</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            "I was juggling part-time work and college, and EVOYOU literally saved my life. The AI understood my constraints and made a realistic schedule. I could balance both without burning out. My grades didn't drop and I even had time for gym. Thank you EVOYOU!"
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <span class="text-yellow-500">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card bg-white rounded-xl shadow-lg p-6 border-t-4 border-red-500 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-start gap-3 mb-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl">📚</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Rahul T.</h4>
+                                <p class="text-sm text-gray-500">Used for 2 months</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            "At first I found it a bit rigid following a schedule, but after a week I got used to it. The website helped me realize how much time I was wasting on social media. Now I'm more disciplined and my productivity has doubled. Only wish there was a mobile app too!"
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <span class="text-yellow-500">⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card bg-white rounded-xl shadow-lg p-6 border-t-4 border-yellow-500 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-start gap-3 mb-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl">✨</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Meera S.</h4>
+                                <p class="text-sm text-gray-500">Used for 5 months</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            "EVOYOU helped me during exam season SO much. I told the AI about all my exam dates and it created a revision schedule that covered everything. No last-minute cramming! I aced my exams and actually understood the concepts. This website is a game-changer for students!"
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <span class="text-yellow-500">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card bg-white rounded-xl shadow-lg p-6 border-t-4 border-pink-500 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-start gap-3 mb-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-pink-100 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl">🌟</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Vikram J.</h4>
+                                <p class="text-sm text-gray-500">Used for 1 month</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            "Just started using it and it's pretty good so far. The interface is clean and easy to use. I like how the AI adjusts to my feedback. Still getting used to following the schedule strictly, but I can already see small improvements in my focus and time management."
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <span class="text-yellow-500">⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card bg-white rounded-xl shadow-lg p-6 border-t-4 border-orange-500 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-start gap-3 mb-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-orange-100 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl">🤔</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Aditya P.</h4>
+                                <p class="text-sm text-gray-500">Used for 3 weeks</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            "Good concept and the AI is smart. However, sometimes the schedule feels a bit too packed for me. I wish there was more flexibility to adjust on the go. Also took me some time to figure out all features. But overall it's helping me stay organized better than before."
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <span class="text-yellow-500">⭐⭐</span>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card bg-white rounded-xl shadow-lg p-6 border-t-4 border-teal-500 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-start gap-3 mb-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-teal-100 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl">🚀</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Kavya N.</h4>
+                                <p class="text-sm text-gray-500">Used for 7 months</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            "Been using EVOYOU since the beginning of this academic year and wow! My life is so much more organized now. The website helped me create healthy habits - regular study times, proper sleep, exercise slots. My mental health improved too because I'm not stressed about deadlines anymore. Highly recommend!"
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <span class="text-yellow-500">⭐⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+
+                    <div class="feedback-card bg-white rounded-xl shadow-lg p-6 border-t-4 border-indigo-500 hover:shadow-xl transition-shadow duration-300">
+                        <div class="flex items-start gap-3 mb-4">
+                            <div class="flex-shrink-0">
+                                <div class="w-12 h-12 bg-indigo-100 rounded-full flex items-center justify-center">
+                                    <span class="text-2xl">👍</span>
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-gray-800">Rohan D.</h4>
+                                <p class="text-sm text-gray-500">Used for 2 months</p>
+                            </div>
+                        </div>
+                        <p class="text-gray-700 leading-relaxed">
+                            "What I love most is how the website respects my personal time. The AI doesn't just cram in study hours - it actually schedules breaks, hobbies, and socializing. This balance is what makes the schedule sustainable long-term. My friends noticed the change and now they're using it too!"
+                        </p>
+                        <div class="mt-4 flex items-center">
+                            <span class="text-yellow-500">⭐⭐⭐⭐</span>
+                        </div>
+                    </div>
+
+                </div>
+
+                <div class="text-center mt-12">
+                    <p class="text-gray-600 text-lg mb-6">
+                        Join thousands of students who are already experiencing better time management!
+                    </p>
+                    <a href="index.html" class="inline-block px-8 py-3 text-lg font-bold rounded-lg bg-blue-400 text-white shadow-lg hover:shadow-xl transition duration-300 transform hover:-translate-y-1">
+                        Try EVOYOU Today
+                    </a>
+                </div>
+            </div>
+        </section>
+        </main>
+
+    <footer class="bg-gray-800 text-white py-8 mt-12">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p class="text-lg font-semibold mb-2"><u>EVOYOU</u></p>
+            <p class="text-sm text-gray-400">© 2025 All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        // === MOBILE MENU TOGGLE LOGIC ===
+        const menuButton = document.getElementById('mobile-menu-button');
+        const menuClose = document.getElementById('mobile-menu-close');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileBackdrop = document.getElementById('mobile-menu-backdrop');
+        const mobileLinks = document.querySelectorAll('.mobile-link');
+        
+        function toggleMobileMenu() {
+            const isOpen = mobileMenu.classList.toggle('open');
+            // This toggles the display of the backdrop via the CSS rule
+            document.body.style.overflowY = isOpen ? 'hidden' : 'auto'; // Prevent scrolling when menu is open
+        }
+
+        // Open menu
+        menuButton.addEventListener('click', toggleMobileMenu);
+
+        // Close menu (from X button or backdrop click)
+        menuClose.addEventListener('click', toggleMobileMenu);
+        mobileBackdrop.addEventListener('click', toggleMobileMenu);
+
+        // Close menu when a link is clicked (for smooth scrolling to anchor)
+        mobileLinks.forEach(link => {
+            link.addEventListener('click', () => {
+                if (mobileMenu.classList.contains('open')) {
+                    toggleMobileMenu();
+                }
+            });
+        });
+
+
+        // === SCROLL ANIMATIONS LOGIC ===
+        const animateElements = document.querySelectorAll('.scroll-animate');
+        const studentCards = document.querySelectorAll('.student-card');
+        const feedbackCards = document.querySelectorAll('.feedback-card');
+        
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                    observer.unobserve(entry.target); // Optional: Stop observing once visible
+                }
+            });
+        }, { threshold: 0.1 }); // Adjusted threshold for better visibility trigger
+        
+        animateElements.forEach(el => observer.observe(el));
+        studentCards.forEach(el => observer.observe(el));
+        feedbackCards.forEach(el => observer.observe(el));
+
+        // === SMOOTH SCROLLING FOR ANCHOR LINKS ===
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    // Calculate the offset to account for the fixed header height
+                    const headerHeight = document.getElementById('navbar-container').offsetHeight;
+                    const elementPosition = target.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - headerHeight;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>
